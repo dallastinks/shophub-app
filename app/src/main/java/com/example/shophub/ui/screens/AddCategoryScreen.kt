@@ -7,7 +7,6 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Button
-import androidx.compose.material3.Card
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
@@ -18,14 +17,15 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
+import com.example.shophub.data.ShopHubRepository
 
 @Composable
-fun LoginScreen(
+fun AddCategoryScreen(
     innerPadding: PaddingValues,
-    onLoginSuccess: () -> Unit
+    onSave: () -> Unit
 ) {
-    var email by remember { mutableStateOf("") }
-    var password by remember { mutableStateOf("") }
+    var name by remember { mutableStateOf("") }
+    var description by remember { mutableStateOf("") }
     var errorMessage by remember { mutableStateOf("") }
 
     Column(
@@ -33,41 +33,24 @@ fun LoginScreen(
             .fillMaxSize()
             .padding(innerPadding)
             .padding(16.dp),
-        verticalArrangement = Arrangement.spacedBy(16.dp)
+        verticalArrangement = Arrangement.spacedBy(12.dp)
     ) {
         Text(
-            text = "Login",
+            text = "Adicionar categoria",
             style = MaterialTheme.typography.headlineSmall
         )
 
-        Card(modifier = Modifier.fillMaxWidth()) {
-            Column(
-                modifier = Modifier.padding(16.dp),
-                verticalArrangement = Arrangement.spacedBy(12.dp)
-            ) {
-                Text(
-                    text = "Acesso fictício do ShopHub",
-                    style = MaterialTheme.typography.titleMedium
-                )
-
-                Text(
-                    text = "Use qualquer e-mail e uma senha com pelo menos 4 caracteres para entrar.",
-                    style = MaterialTheme.typography.bodyMedium
-                )
-            }
-        }
-
         OutlinedTextField(
-            value = email,
-            onValueChange = { email = it },
-            label = { Text("E-mail") },
+            value = name,
+            onValueChange = { name = it },
+            label = { Text("Nome da categoria") },
             modifier = Modifier.fillMaxWidth()
         )
 
         OutlinedTextField(
-            value = password,
-            onValueChange = { password = it },
-            label = { Text("Senha") },
+            value = description,
+            onValueChange = { description = it },
+            label = { Text("Descrição da categoria") },
             modifier = Modifier.fillMaxWidth()
         )
 
@@ -80,15 +63,19 @@ fun LoginScreen(
 
         Button(
             onClick = {
-                when {
-                    email.isBlank() -> errorMessage = "Informe um e-mail."
-                    password.length < 4 -> errorMessage = "A senha deve ter pelo menos 4 caracteres."
-                    else -> onLoginSuccess()
+                if (name.isBlank() || description.isBlank()) {
+                    errorMessage = "Preencha todos os campos."
+                } else {
+                    ShopHubRepository.addCategory(
+                        name = name,
+                        description = description
+                    )
+                    onSave()
                 }
             },
             modifier = Modifier.fillMaxWidth()
         ) {
-            Text("Entrar")
+            Text("Salvar categoria")
         }
     }
 }
