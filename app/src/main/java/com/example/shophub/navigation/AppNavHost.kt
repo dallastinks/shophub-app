@@ -76,6 +76,7 @@ fun ShopHubApp() {
                     onLoginSuccess = {
                         navController.navigate(AppRoutes.Home.route) {
                             popUpTo(AppRoutes.Login.route) { inclusive = true }
+                            launchSingleTop = true
                         }
                     }
                 )
@@ -108,6 +109,7 @@ fun ShopHubApp() {
                     onSave = {
                         navController.navigate(AppRoutes.ProductList.route) {
                             popUpTo(AppRoutes.AddProduct.route) { inclusive = true }
+                            launchSingleTop = true
                         }
                     }
                 )
@@ -141,6 +143,7 @@ fun ShopHubApp() {
                     onSave = {
                         navController.navigate(AppRoutes.CategoryList.route) {
                             popUpTo(AppRoutes.AddCategory.route) { inclusive = true }
+                            launchSingleTop = true
                         }
                     }
                 )
